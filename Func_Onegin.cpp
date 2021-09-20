@@ -5,7 +5,7 @@
 #include <string.h>
 #include "Onegin.h"
 
-size_t file_size(FILE* input_file) {
+size_t file_size(FILE *input_file) {
     assert(input_file != NULL);
 
     size_t size_of_file = 0;
@@ -17,7 +17,7 @@ size_t file_size(FILE* input_file) {
     return size_of_file;
 }
 
-size_t count_onegin_string(const unsigned char* onegin_buf, const size_t onegin_buf_size) {
+size_t count_onegin_string(const unsigned char *onegin_buf, const size_t onegin_buf_size) {
     assert(onegin_buf);
 
     size_t count_onegin_str = 0;
@@ -28,7 +28,7 @@ size_t count_onegin_string(const unsigned char* onegin_buf, const size_t onegin_
             +1; //последняя строка
 }
 
-struct OneginString NewOneginString(const unsigned char* onegin_buf, const size_t onegin_buf_size,
+struct OneginString NewOneginString(const unsigned char *onegin_buf, const size_t onegin_buf_size,
                                     const size_t start_byte) {
     assert(onegin_buf != NULL);
 
@@ -46,8 +46,8 @@ struct OneginString NewOneginString(const unsigned char* onegin_buf, const size_
     return new_onegin_str;
 }
 
-void CreateOneginStringArr(const unsigned char* onegin_buf, const size_t onegin_buf_size, 
-                           const size_t onegin_string_count, struct OneginString* onegin_string_arr) {
+void CreateOneginStringArr(const unsigned char *onegin_buf, const size_t onegin_buf_size, 
+                           const size_t onegin_string_count, struct OneginString *onegin_string_arr) {
     assert(onegin_buf != NULL);
     assert(onegin_string_arr);
 
@@ -60,7 +60,7 @@ void CreateOneginStringArr(const unsigned char* onegin_buf, const size_t onegin_
     }   
 }
 
-void WriteOneginString(FILE* output_file, const struct OneginString onegin_str) {
+void WriteOneginString(FILE *output_file, const struct OneginString onegin_str) {
     assert(output_file);
 
     for(size_t i = 0; i < onegin_str.len; ++i) {
@@ -68,7 +68,7 @@ void WriteOneginString(FILE* output_file, const struct OneginString onegin_str) 
     }
 }
 
-void WriteOneginArr(FILE* output_file, 
+void WriteOneginArr(FILE *output_file, 
                     const struct OneginString* onegin_string_arr, const size_t onegin_string_count) {
     assert(output_file);
     assert(onegin_string_arr != NULL);
@@ -131,8 +131,8 @@ int RussianLyrCmp(unsigned char first_lyr, unsigned char second_lyr) {
             (int)GetLowLetterRussianLyrNewEnc(GetRussianLyrNewEnc(second_lyr));
 }
 
-int LRussianStringOneginCmp(unsigned char* first_string, size_t first_string_len,
-                            unsigned char* second_string, size_t second_string_len) {
+int LRussianStringOneginCmp(unsigned char *first_string, size_t first_string_len,
+                            unsigned char *second_string, size_t second_string_len) {
 
     assert(first_string && second_string);
 
@@ -164,7 +164,7 @@ int LRussianStringOneginCmp(unsigned char* first_string, size_t first_string_len
     return (int)first_string_len - (int)second_string_len;
 }
 
-int LOneginStringCmp(const void* lhs, const void* rhs) {
+int LOneginStringCmp(const void *lhs, const void *rhs) {
     assert(lhs && rhs);
 
     struct OneginString first_onegin_str  = *(struct OneginString*)lhs,
@@ -188,6 +188,27 @@ int LRomeoStringCmp(const void *lhs, const void *rhs) {
         
         first_romeo_string.str++;
         second_romeo_string.str++;
+    }
+    return *(const unsigned char*)first_romeo_string.str - 
+           *(const unsigned char*)second_romeo_string.str;
+}
+
+int RRomeoStringCmp(const void *lhs, const void *rhs) {
+    assert(lhs && rhs);
+
+    struct OneginString first_romeo_string  = *(struct OneginString*)lhs,
+                        second_romeo_string = *(struct OneginString*)rhs;
+
+    first_romeo_string.str += first_romeo_string.len;
+    second_romeo_string.str += second_romeo_string.len;
+
+    while(*first_romeo_string.str)
+    {
+        if(*first_romeo_string.str != *second_romeo_string.str)
+            break;
+        
+        first_romeo_string.str--;
+        second_romeo_string.str--;
     }
     return *(const unsigned char*)first_romeo_string.str - 
            *(const unsigned char*)second_romeo_string.str;

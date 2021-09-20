@@ -35,6 +35,10 @@ int main(int argc, char **argv) {
  
     WriteOneginArr(output_file, onegin_string_arr, onegin_string_count);
 
+    qsort(onegin_string_arr, onegin_string_count, sizeof(struct OneginString), RRomeoStringCmp);
+
+    WriteOneginArr(output_file, onegin_string_arr, onegin_string_count);
+
     free(input_buf);
     free(onegin_string_arr);
 }
