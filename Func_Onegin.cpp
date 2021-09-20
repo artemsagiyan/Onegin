@@ -131,51 +131,51 @@ int RussianLyrCmp(unsigned char first_lyr, unsigned char second_lyr) {
             (int)GetLowLetterRussianLyrNewEnc(GetRussianLyrNewEnc(second_lyr));
 }
 
-// int LRussianStringOneginCmp(unsigned char* first_string, size_t first_string_len,
-//                             unsigned char* second_string, size_t second_string_len) {
+int LRussianStringOneginCmp(unsigned char* first_string, size_t first_string_len,
+                            unsigned char* second_string, size_t second_string_len) {
 
-//   assert(first_string && second_string);
+    assert(first_string && second_string);
 
-//   size_t min_len = first_string_len;  
-//   if (second_string_len < min_len)
-//     min_len = second_string_len;
+    size_t min_len = first_string_len;  
+    if (second_string_len < min_len)
+        min_len = second_string_len;
 
-//   int first_string_it = 0,
-//       second_string_it = 0;
+    int first_string_it = 0,
+        second_string_it = 0;
 
-//   while (first_string_it < min_len && second_string_it < min_len) {
-//     if (!CheckIsRussianLyr_win1251(first_string[first_string_it])) {
-//       first_string_it++;
-//       continue;
-//     }
+    while (first_string_it < min_len && second_string_it < min_len) {
+        if (!CheckIsRussianLyr_win1251(first_string[first_string_it])) {
+        first_string_it++;
+        continue;
+        }
 
-//     if (!CheckIsRussianLyr_win1251(second_string[second_string_it])) {
-//       second_string_it++;
-//       continue;
-//     }
+        if (!CheckIsRussianLyr_win1251(second_string[second_string_it])) {
+        second_string_it++;
+        continue;
+        }
 
-//     if (RussianLyrCmp(first_string[first_string_it], second_string[second_string_it]) != 0)
-//       return RussianLyrCmp(first_string[first_string_it], second_string[second_string_it]);
+        if (RussianLyrCmp(first_string[first_string_it], second_string[second_string_it]) != 0)
+        return RussianLyrCmp(first_string[first_string_it], second_string[second_string_it]);
 
-//     first_string_it++;
-//     second_string_it++;
-//   }
+        first_string_it++;
+        second_string_it++;
+    }
 
-//   return (int)first_string_len - (int)second_string_len;
-// }
+    return (int)first_string_len - (int)second_string_len;
+}
 
-// int LOneginStringCmp(const void* lhs, const void* rhs) {
-//   assert(lhs && rhs);
+int LOneginStringCmp(const void* lhs, const void* rhs) {
+    assert(lhs && rhs);
 
-//   struct OneginString first_onegin_str  = *(struct OneginString*)lhs,
-//                       second_onegin_str = *(struct OneginString*)rhs; 
+    struct OneginString first_onegin_str  = *(struct OneginString*)lhs,
+                        second_onegin_str = *(struct OneginString*)rhs; 
 
-//   return LRussianStringOneginCmp(first_onegin_str.str, first_onegin_str.len,
-//                                  second_onegin_str.str, second_onegin_str.len);
-// }
+    return LRussianStringOneginCmp(first_onegin_str.str, first_onegin_str.len,
+                                    second_onegin_str.str, second_onegin_str.len);
+}
 
 
-int LOneginStringCmp(const void *lhs, const void *rhs) {
+int LRomeoStringCmp(const void *lhs, const void *rhs) {
     assert(lhs && rhs);
 
     struct OneginString first_romeo_string  = *(struct OneginString*)lhs,

@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 
     CreateOneginStringArr(input_buf, buf_size, onegin_string_count, onegin_string_arr);
  
-    qsort(onegin_string_arr, onegin_string_count, sizeof(struct OneginString), LOneginStringCmp);
+    qsort(onegin_string_arr, onegin_string_count, sizeof(struct OneginString), LRomeoStringCmp);
  
     WriteOneginArr(output_file, onegin_string_arr, onegin_string_count);
 

@@ -48,3 +48,5 @@ int LRussianStringOneginCmp(unsigned char* first_string, size_t first_string_len
                             unsigned char* second_string, size_t second_string_len);
 
 int LOneginStringCmp(const void* lhs, const void* rhs);
+
+int LRomeoStringCmp(const void* lhs, const void* rhs);
