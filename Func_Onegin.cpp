@@ -202,7 +202,7 @@ int RRomeoStringCmp(const void *lhs, const void *rhs) {
     first_romeo_string.str += first_romeo_string.len;
     second_romeo_string.str += second_romeo_string.len;
 
-    while(*first_romeo_string.str)
+    while(*first_romeo_string.str && *second_romeo_string.str)
     {
         if(*first_romeo_string.str != *second_romeo_string.str)
             break;
@@ -216,16 +216,16 @@ int RRomeoStringCmp(const void *lhs, const void *rhs) {
 
 void Myqsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
     assert(base);
-    qsort_impl(base, 0u, size - 1, LRomeoStringCmp);
+    qsort_impl(base, 0u, size - 1, compar);
 }
 
 void qsort_impl(void *base, size_t low, size_t high, int (*compar)(const void *, const void *)) {
   assert(base);
   
   if (low >= high) return;
-  size_t pi = partition(base, low, high, LRomeoStringCmp);
-  if (pi > low) qsort_impl(base, low, pi - 1, LRomeoStringCmp);
-  qsort_impl(base, pi + 1, high, LRomeoStringCmp);
+  size_t pi = partition(base, low, high, compar);
+  if (pi > low) qsort_impl(base, low, pi - 1, compar);
+  qsort_impl(base, pi + 1, high, compar);
 }
 
 size_t partition (void *base, size_t low, size_t high, int (*compar)(const void *, const void *)) {
@@ -258,3 +258,6 @@ void swap(void *v1, void *v2)
     *(OneginString*)v1 = *(OneginString*)v2;
     *(OneginString*)v2 = tmp;
 }
+
+
+            

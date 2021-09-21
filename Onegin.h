@@ -1,10 +1,10 @@
 #include <stdio.h>
 
 /**
- * @brief Структура для хранения инофрмации о строке
+ * @brief Struct for saving data about onegin string
  * 
- * @param str - указатель на начало строки
- * @param len - длина строки
+ * @param str - ptr on begin of string
+ * @param len - length of string
  * 
  */
 struct OneginString {
@@ -13,11 +13,11 @@ struct OneginString {
 };
 
 /**
- * @brief Считает количество байтов в файле
+ * @brief Count of byte 
  * 
- * @param input_file - input file
+ * @param input_file [in]  - input file
  * 
- * @return size_t    - count of byte
+ * @return size_t    [out] - count of byte
  */
 size_t file_size(FILE *input_file);
 /**
@@ -180,13 +180,46 @@ int RRomeoStringCmp(const void *lhs, const void *rhs);
  * @param base   [in] - arr
  * @param nmemb  [in] - count memery for 1 element 
  * @param size   [in] - count numbers of arr for sorting
- * @param compar [in] - comparator for
+ * @param compar [in] - comparator for sorting
  */
 void Myqsort(void *base, size_t nmemb, size_t size, 
               int (*compar)(const void *, const void *));
-
+/**
+ * @brief Change means of 2 var
+ * 
+ * @param v1 
+ * @param v2 
+ */
 void swap(void *v1, void *v2);
 
+/**
+ * @brief Sorting with method quick_sort
+ * 
+ * @param base   [in] - sorting arrive
+ * @param low    [in] - low position of sorting
+ * @param high   [in] - high position for sorting
+ * @param compar [in] - comporator fot sorting
+ */
 void qsort_impl(void *base, size_t low, size_t high, int (*compar)(const void *, const void *));
 
+/**
+ * @brief Div massiv on low and high parts
+ * 
+ * @param base    [in]  - sorting arrive
+ * @param low     [in]  - low position of sorting
+ * @param high    [in]  - high position for sorting
+ * @param compar  [in]  - comporator fot sorting
+ * 
+ * @return size_t [out] - need position for div
+ */
 size_t partition(void *base, size_t low, size_t high, int (*compar)(const void *, const void *));
+
+/**
+ * @brief Copy first_arr to second_arr
+ * 
+ * @param onegin_string_arr      [in] - first arr
+ * @param onegin_string_arr_copy [in] - second arr
+ */
+void OneginArrStructCopy(const  size_t onegin_string_count,
+                         struct OneginString *onegin_string_arr, 
+                         struct OneginString *onegin_string_arr_copy);

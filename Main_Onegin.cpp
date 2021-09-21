@@ -28,6 +28,8 @@ int main(int argc, char **argv) {
 
     struct OneginString* onegin_string_arr = (struct OneginString*) calloc(onegin_string_count, 
                                                                          sizeof(struct OneginString));
+    struct OneginString* onegin_string_arr_copy = (struct OneginString*) calloc(1 + onegin_string_count, 
+                                                                         sizeof(struct OneginString));
 
     CreateOneginStringArr(input_buf, buf_size, onegin_string_count, onegin_string_arr);
  
@@ -48,6 +50,9 @@ int main(int argc, char **argv) {
     fprintf(output_file,
     "\n\n___________________________________SORT on RIGHT side___________________________________\n\n\n");
     WriteOneginArr(output_file, onegin_string_arr, onegin_string_count);
+
+    OneginArrStructCopy(onegin_string_count, onegin_string_arr, onegin_string_arr_copy);
+    WriteOneginArr(output_file, onegin_string_arr_copy, onegin_string_count);
 
     free(input_buf);
     free(onegin_string_arr);
