@@ -8,7 +8,7 @@
  * 
  */
 struct OneginString {
-    unsigned char *str;
+    char *str;
     size_t len;
 };
 
@@ -28,9 +28,9 @@ size_t file_size(FILE *input_file);
  *
  * @return size_t         [out] - Size of file
  */
-size_t count_onegin_string(const unsigned char *onegin_buf, const size_t onegin_buf_size);
+size_t count_onegin_string(const char *onegin_buf, const size_t onegin_buf_size);
 
-struct OneginString NewOneginString(const unsigned char *onegin_buf, const size_t onegin_buf_size,
+struct OneginString NewOneginString(const char *onegin_buf, const size_t onegin_buf_size,
                                     const size_t start_byte);
 /**
  * @brief Create a Onegin String Arr object
@@ -40,7 +40,7 @@ struct OneginString NewOneginString(const unsigned char *onegin_buf, const size_
  * @param onegin_string_count [in] - Count of onegin strings
  * @param onegin_string_arr   [in] - Arrive of string fot onegin
  */
-void CreateOneginStringArr(const unsigned char *onegin_buf, const size_t onegin_buf_size, 
+void CreateOneginStringArr(const char *onegin_buf, const size_t onegin_buf_size, 
                            const size_t onegin_string_count, struct OneginString *onegin_string_arr);
 /**
  * @brief Write string to file
@@ -84,7 +84,7 @@ enum Russian_win1251_pos {
  * @return true 
  * @return false 
  */
-bool CheckIsRussianLyr_win1251(unsigned char lyr);
+bool CheckIsRussianLyr_win1251(char lyr);
 
 /**
  * @brief Check: is Lyr big Russia?
@@ -93,7 +93,7 @@ bool CheckIsRussianLyr_win1251(unsigned char lyr);
  * @return true 
  * @return false 
  */
-bool IsBigRussianLyr_win1251(unsigned char lyr);
+bool IsBigRussianLyr_win1251(char lyr);
 
 /**
  * @brief Get the Russian Lyr New Enc object
@@ -101,7 +101,7 @@ bool IsBigRussianLyr_win1251(unsigned char lyr);
  * @param lyr 
  * @return unsigned char 
  */
-unsigned char GetRussianLyrNewEnc(unsigned char lyr);
+char GetRussianLyrNewEnc(char lyr);
 
 /**
  * @brief Get the Low Letter Russian Lyr New Enc object
@@ -109,7 +109,7 @@ unsigned char GetRussianLyrNewEnc(unsigned char lyr);
  * @param lyr 
  * @return unsigned char 
  */
-unsigned char GetLowLetterRussianLyrNewEnc(unsigned char lyr);
+char GetLowLetterRussianLyrNewEnc(char lyr);
 
 /**
  * @brief Compare 2 russian lyr
@@ -121,7 +121,7 @@ unsigned char GetLowLetterRussianLyrNewEnc(unsigned char lyr);
  *             > 0 - second, 
  *             = 0 - equal
  */
-int RussianLyrCmp(unsigned char first_lyr, unsigned char second_lyr);
+int RussianLyrCmp(char first_lyr, char second_lyr);
 
 /**
  * @brief Compare 2 russian strings
@@ -135,8 +135,8 @@ int RussianLyrCmp(unsigned char first_lyr, unsigned char second_lyr);
  *             > 0 - second, 
  *             = 0 - equal
  */
-int LRussianStringOneginCmp(unsigned char *first_string, size_t first_string_len,
-                            unsigned char *second_string, size_t second_string_len);
+int LRussianStringOneginCmp(char *first_string, size_t first_string_len,
+                            char *second_string, size_t second_string_len);
 
 /**
  * @brief Compare 2 onegin_string
@@ -173,3 +173,20 @@ int LRomeoStringCmp(const void *lhs, const void *rhs);
  *             = 0 - equal
  */
 int RRomeoStringCmp(const void *lhs, const void *rhs);
+
+/**
+ * @brief Sort of arr with quick sort
+ * 
+ * @param base   [in] - arr
+ * @param nmemb  [in] - count memery for 1 element 
+ * @param size   [in] - count numbers of arr for sorting
+ * @param compar [in] - comparator for
+ */
+void Myqsort(void *base, size_t nmemb, size_t size, 
+              int (*compar)(const void *, const void *));
+
+void swap(void *v1, void *v2);
+
+void qsort_impl(void *base, size_t low, size_t high, int (*compar)(const void *, const void *));
+
+size_t partition(void *base, size_t low, size_t high, int (*compar)(const void *, const void *));

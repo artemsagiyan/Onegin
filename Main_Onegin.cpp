@@ -19,10 +19,10 @@ int main(int argc, char **argv) {
     size_t buf_size = file_size(input_file);
     assert(buf_size != 0);
 
-    unsigned char* input_buf = (unsigned char*)calloc(buf_size, sizeof(unsigned char));
+    char* input_buf = (char*)calloc(buf_size, sizeof(char));
     assert(input_buf != NULL);
 
-    fread(input_buf, sizeof(unsigned char), buf_size, input_file);
+    fread(input_buf, sizeof(char), buf_size, input_file);
 
     size_t onegin_string_count = count_onegin_string(input_buf, buf_size);
 
@@ -31,12 +31,22 @@ int main(int argc, char **argv) {
 
     CreateOneginStringArr(input_buf, buf_size, onegin_string_count, onegin_string_arr);
  
-    qsort(onegin_string_arr, onegin_string_count, sizeof(struct OneginString), LRomeoStringCmp);
+    printf("SORT STARTING...\n");
  
+    Myqsort(onegin_string_arr, sizeof(struct OneginString), onegin_string_count, LRomeoStringCmp);
+
+    printf("SORT in L side is finished\n");
+
+    fprintf(output_file,
+    "___________________________________SORT on LEFT side___________________________________\n\n\n");
     WriteOneginArr(output_file, onegin_string_arr, onegin_string_count);
 
-    qsort(onegin_string_arr, onegin_string_count, sizeof(struct OneginString), RRomeoStringCmp);
+    Myqsort(onegin_string_arr, sizeof(struct OneginString), onegin_string_count, RRomeoStringCmp);
 
+    printf("SORT in R side is finished\n");
+
+    fprintf(output_file,
+    "\n\n___________________________________SORT on RIGHT side___________________________________\n\n\n");
     WriteOneginArr(output_file, onegin_string_arr, onegin_string_count);
 
     free(input_buf);

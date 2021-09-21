@@ -17,7 +17,7 @@ size_t file_size(FILE *input_file) {
     return size_of_file;
 }
 
-size_t count_onegin_string(const unsigned char *onegin_buf, const size_t onegin_buf_size) {
+size_t count_onegin_string(const char *onegin_buf, const size_t onegin_buf_size) {
     assert(onegin_buf);
 
     size_t count_onegin_str = 0;
@@ -28,12 +28,12 @@ size_t count_onegin_string(const unsigned char *onegin_buf, const size_t onegin_
             +1; //последняя строка
 }
 
-struct OneginString NewOneginString(const unsigned char *onegin_buf, const size_t onegin_buf_size,
+struct OneginString NewOneginString(const char *onegin_buf, const size_t onegin_buf_size,
                                     const size_t start_byte) {
     assert(onegin_buf != NULL);
 
     struct OneginString new_onegin_str;
-    new_onegin_str.str = (unsigned char*)onegin_buf + start_byte;
+    new_onegin_str.str = (char*)onegin_buf + start_byte;
 
     size_t len_new_onegin_str = 0;
     while(start_byte + len_new_onegin_str < onegin_buf_size &&
@@ -46,7 +46,7 @@ struct OneginString NewOneginString(const unsigned char *onegin_buf, const size_
     return new_onegin_str;
 }
 
-void CreateOneginStringArr(const unsigned char *onegin_buf, const size_t onegin_buf_size, 
+void CreateOneginStringArr(const char *onegin_buf, const size_t onegin_buf_size, 
                            const size_t onegin_string_count, struct OneginString *onegin_string_arr) {
     assert(onegin_buf != NULL);
     assert(onegin_string_arr);
@@ -80,7 +80,7 @@ void WriteOneginArr(FILE *output_file,
     }
 }
  
-bool CheckIsRussianLyr_win1251(unsigned char lyr) {
+bool CheckIsRussianLyr_win1251(char lyr) {
     if (lyr == BIG_YO_POS || lyr == LITTLE_YO_POS) {
         return true;
     }
@@ -91,13 +91,13 @@ bool CheckIsRussianLyr_win1251(unsigned char lyr) {
     return lyr >= LITTLE_A_POS && lyr <= LITTLE_YA_POS;
 }
  
-bool IsBigRussianLyr_win1251(unsigned char lyr) {
+bool IsBigRussianLyr_win1251(char lyr) {
     assert(CheckIsRussianLyr_win1251(lyr));
     
     return lyr == BIG_YO_POS || (lyr >= BIG_A_POS && lyr <= BIG_YA_POS);
 }
  
-unsigned char GetRussianLyrNewEnc(unsigned char lyr) {
+char GetRussianLyrNewEnc(char lyr) {
     assert(CheckIsRussianLyr_win1251(lyr));
     
     if (IsBigRussianLyr_win1251(lyr)) {
@@ -119,20 +119,20 @@ unsigned char GetRussianLyrNewEnc(unsigned char lyr) {
     return lyr;
 }
  
-unsigned char GetLowLetterRussianLyrNewEnc(unsigned char lyr) {
+char GetLowLetterRussianLyrNewEnc(char lyr) {
     if (lyr >= BIG_A_POS-1 && lyr <= BIG_YA_POS)
         return lyr - (BIG_A_POS-1) + (LITTLE_A_POS-1);
     
     return lyr;
 }
  
-int RussianLyrCmp(unsigned char first_lyr, unsigned char second_lyr) {
+int RussianLyrCmp(char first_lyr, char second_lyr) {
     return (int)GetLowLetterRussianLyrNewEnc(GetRussianLyrNewEnc(first_lyr)) - 
             (int)GetLowLetterRussianLyrNewEnc(GetRussianLyrNewEnc(second_lyr));
 }
 
-int LRussianStringOneginCmp(unsigned char *first_string, size_t first_string_len,
-                            unsigned char *second_string, size_t second_string_len) {
+int LRussianStringOneginCmp(char *first_string, size_t first_string_len,
+                            char *second_string, size_t second_string_len) {
 
     assert(first_string && second_string);
 
@@ -189,8 +189,8 @@ int LRomeoStringCmp(const void *lhs, const void *rhs) {
         first_romeo_string.str++;
         second_romeo_string.str++;
     }
-    return *(const unsigned char*)first_romeo_string.str - 
-           *(const unsigned char*)second_romeo_string.str;
+    return *(const char*)first_romeo_string.str - 
+           *(const char*)second_romeo_string.str;
 }
 
 int RRomeoStringCmp(const void *lhs, const void *rhs) {
@@ -210,6 +210,51 @@ int RRomeoStringCmp(const void *lhs, const void *rhs) {
         first_romeo_string.str--;
         second_romeo_string.str--;
     }
-    return *(const unsigned char*)first_romeo_string.str - 
-           *(const unsigned char*)second_romeo_string.str;
+    return *(const char*)first_romeo_string.str - 
+           *(const char*)second_romeo_string.str;
+}
+
+void Myqsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
+    assert(base);
+    qsort_impl(base, 0u, size - 1, LRomeoStringCmp);
+}
+
+void qsort_impl(void *base, size_t low, size_t high, int (*compar)(const void *, const void *)) {
+  assert(base);
+  
+  if (low >= high) return;
+  size_t pi = partition(base, low, high, LRomeoStringCmp);
+  if (pi > low) qsort_impl(base, low, pi - 1, LRomeoStringCmp);
+  qsort_impl(base, pi + 1, high, LRomeoStringCmp);
+}
+
+size_t partition (void *base, size_t low, size_t high, int (*compar)(const void *, const void *)) {
+    assert(base);
+    struct OneginString* onegin_string_arr = (OneginString*)base;
+
+    size_t ind_l = low, 
+           ind_r = high;
+    while(ind_l < ind_r) {
+        if(compar(&onegin_string_arr[ind_l], &onegin_string_arr[ind_r]) < 0) ind_r--;
+        else {
+            swap(&onegin_string_arr[ind_l], &onegin_string_arr[ind_r]);
+            ind_l++;
+            while(ind_l < ind_r) {
+                if((compar(&onegin_string_arr[ind_r], &onegin_string_arr[ind_l]) > 0)) ind_l++;
+                else {
+                    swap(&onegin_string_arr[ind_l], &onegin_string_arr[ind_r]);
+                    ind_r--;
+                    break;
+                }
+            }
+        } 
+    } 
+    return ind_l;
+}
+
+void swap(void *v1, void *v2)
+{
+    struct OneginString tmp = *(OneginString*)v1;
+    *(OneginString*)v1 = *(OneginString*)v2;
+    *(OneginString*)v2 = tmp;
 }
