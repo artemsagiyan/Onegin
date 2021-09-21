@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include "Onegin.h"
 
 size_t file_size(FILE *input_file) {
@@ -38,6 +39,16 @@ struct OneginString NewOneginString(const char *onegin_buf, const size_t onegin_
     size_t len_new_onegin_str = 0;
     while(start_byte + len_new_onegin_str < onegin_buf_size &&
           new_onegin_str.str[len_new_onegin_str] != '\n') {
+        if (new_onegin_str.str[len_new_onegin_str] == 'I'  ||
+            new_onegin_str.str[len_new_onegin_str] == 'V'  ||
+            new_onegin_str.str[len_new_onegin_str] == 'X'  ||
+            new_onegin_str.str[len_new_onegin_str] == 'L'  ||
+            new_onegin_str.str[len_new_onegin_str] == ']'  ||
+            isdigit(new_onegin_str.str[len_new_onegin_str])) {
+            
+            new_onegin_str.len = 0;
+            return new_onegin_str;
+        }
         len_new_onegin_str++;
     }
 
@@ -75,6 +86,7 @@ void WriteOneginArr(FILE *output_file,
 
     for (size_t i = 0; i < onegin_string_count; ++i) {
         if((onegin_string_arr + i)->str[0] == '\n') continue;
+        if(onegin_string_arr[i].len == 0) continue;
         WriteOneginString(output_file, onegin_string_arr[i]);
         fprintf(output_file, "\n");
     }
@@ -259,5 +271,17 @@ void swap(void *v1, void *v2)
     *(OneginString*)v2 = tmp;
 }
 
+void OneginArrStructCopy(const  size_t onegin_string_count,
+                         struct OneginString *onegin_string_arr, 
+                         struct OneginString *onegin_string_arr_copy) {
+    assert(onegin_string_arr);
+    assert(onegin_string_arr_copy);
 
+    for(int it = 0; it < onegin_string_count; ++it) {
+        onegin_string_arr_copy[it].len = onegin_string_arr[it].len;
+
+        strcpy(onegin_string_arr_copy[it].str,
+                onegin_string_arr[it].str);
+    }
+}
             
