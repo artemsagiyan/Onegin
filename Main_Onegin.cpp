@@ -51,8 +51,8 @@ int main(int argc, char **argv) {
     "\n\n___________________________________SORT on RIGHT side___________________________________\n\n\n");
     WriteOneginArr(output_file, onegin_string_arr, onegin_string_count);
 
-    OneginArrStructCopy(onegin_string_count, onegin_string_arr, onegin_string_arr_copy);
-    WriteOneginArr(output_file, onegin_string_arr_copy, onegin_string_count);
+    //OneginArrStructCopy(onegin_string_count, onegin_string_arr, onegin_string_arr_copy);
+    //WriteOneginArr(output_file, onegin_string_arr_copy, onegin_string_count);
 
     free(input_buf);
     free(onegin_string_arr);
