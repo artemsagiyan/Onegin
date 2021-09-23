@@ -12,6 +12,12 @@ struct OneginString {
     size_t len;
 };
 
+typedef struct OneginStringArr {
+     size_t onegin_string_count;
+     char * onegin_buf;
+     struct OneginString *onegin_string_arr;
+}Text;
+
 /**
  * @brief Count of byte 
  * 
@@ -200,7 +206,7 @@ void swap(void *v1, void *v2);
  * @param high   [in] - high position for sorting
  * @param compar [in] - comporator fot sorting
  */
-void qsort_impl(void *base, size_t low, size_t high, int (*compar)(const void *, const void *));
+void QsortImpl(void *base, size_t low, size_t high, int (*compar)(const void *, const void *));
 
 /**
  * @brief Div massiv on low and high parts
@@ -212,7 +218,7 @@ void qsort_impl(void *base, size_t low, size_t high, int (*compar)(const void *,
  * 
  * @return size_t [out] - need position for div
  */
-size_t partition(void *base, size_t low, size_t high, int (*compar)(const void *, const void *));
+size_t Partition(void *base, size_t low, size_t high, int (*compar)(const void *, const void *));
 
 /**
  * @brief Copy first_arr to second_arr
