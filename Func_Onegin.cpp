@@ -263,20 +263,6 @@ void swap(void *v1, void *v2)
     *(OneginString*)v2 = tmp;
 }
 
-void OneginArrStructCopy(const  size_t onegin_string_count,
-                         struct OneginString *onegin_string_arr, 
-                         struct OneginString *onegin_string_arr_copy) {
-    assert(onegin_string_arr);
-    assert(onegin_string_arr_copy);
-
-    for(int it = 0; it < onegin_string_count; ++it) {
-        onegin_string_arr_copy[it].len = onegin_string_arr[it].len;
-
-        strcpy(onegin_string_arr_copy[it].str,
-                onegin_string_arr[it].str);
-    }
-}
-
 void DistructOnegin(Text *Onegin) {
     free(Onegin->onegin_buf);
     free(Onegin->onegin_string_arr);

@@ -1,3 +1,5 @@
+#define NDEBUG
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +36,7 @@ int main(int argc, char **argv) {
     Onegin.onegin_string_count = CountOneginString(&Onegin);
 
     Onegin.onegin_string_arr = (struct OneginString*) calloc(Onegin.onegin_string_count, 
-                                                                         sizeof(struct OneginString));
+                                                                         sizeof(struct OneginString));                                                                     
     
     CreateOneginStringArr(&Onegin);
  

@@ -17,7 +17,7 @@ struct OneginString {
  * 
  * @param onegin_buf          - Buffer for all file
  * @param onegin_string_count - Count of onegin strings
- * @param omegin_size_of_file - Count bytes of file
+ * @param onegin_size_of_file - Count bytes of file
  * @param onegin_string_arr   - Arrive of string for onegin
  */
 typedef struct OneginStringArr {
@@ -230,16 +230,6 @@ void QsortImpl(void *base, size_t low, size_t high, int (*compar)(const void *, 
  * @return size_t [out] - need position for div
  */
 size_t Partition(void *base, size_t low, size_t high, int (*compar)(const void *, const void *));
-
-/**
- * @brief Copy first_arr to second_arr
- * 
- * @param onegin_string_arr      [in] - first arr
- * @param onegin_string_arr_copy [in] - second arr
- */
-void OneginArrStructCopy(const  size_t onegin_string_count,
-                         struct OneginString *onegin_string_arr, 
-                         struct OneginString *onegin_string_arr_copy);
 
 /**
  * @brief Clear mem of Text
