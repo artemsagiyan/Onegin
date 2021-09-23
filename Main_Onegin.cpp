@@ -16,44 +16,45 @@ int main(int argc, char **argv) {
     assert(input_file);
     assert(output_file);
 
-    size_t buf_size = file_size(input_file);
-    assert(buf_size != 0);
+    Text Onegin{
+        .onegin_buf = NULL,
+        .onegin_string_count = 0,
+        .onegin_size_of_file = 0,
+        .onegin_string_arr = NULL
+    };
 
-    char* input_buf = (char*)calloc(buf_size, sizeof(char));
-    assert(input_buf != NULL);
+    FileSize(input_file, &Onegin);
+    assert(Onegin.onegin_size_of_file != 0);
 
-    fread(input_buf, sizeof(char), buf_size, input_file);
+    Onegin.onegin_buf = (char*)calloc(Onegin.onegin_size_of_file, sizeof(char));
+    assert(Onegin.onegin_buf != NULL);
 
-    size_t onegin_string_count = count_onegin_string(input_buf, buf_size);
+    fread(Onegin.onegin_buf, sizeof(char), Onegin.onegin_size_of_file, input_file);
 
-    struct OneginString* onegin_string_arr = (struct OneginString*) calloc(onegin_string_count, 
+    Onegin.onegin_string_count = CountOneginString(&Onegin);
+
+    Onegin.onegin_string_arr = (struct OneginString*) calloc(Onegin.onegin_string_count, 
                                                                          sizeof(struct OneginString));
-    struct OneginString* onegin_string_arr_copy = (struct OneginString*) calloc(1 + onegin_string_count, 
-                                                                         sizeof(struct OneginString));
-
-    CreateOneginStringArr(input_buf, buf_size, onegin_string_count, onegin_string_arr);
+    
+    CreateOneginStringArr(&Onegin);
  
     printf("SORT STARTING...\n");
  
-    Myqsort(onegin_string_arr, sizeof(struct OneginString), onegin_string_count, LRomeoStringCmp);
+    Myqsort(Onegin.onegin_string_arr, sizeof(struct OneginString), Onegin.onegin_string_count, LRomeoStringCmp);
 
     printf("SORT in L side is finished\n");
 
     fprintf(output_file,
     "___________________________________SORT on LEFT side___________________________________\n\n\n");
-    WriteOneginArr(output_file, onegin_string_arr, onegin_string_count);
+    WriteOneginArr(output_file, &Onegin);
 
-    Myqsort(onegin_string_arr, sizeof(struct OneginString), onegin_string_count, RRomeoStringCmp);
+    Myqsort(Onegin.onegin_string_arr, sizeof(struct OneginString), Onegin.onegin_string_count, RRomeoStringCmp);
 
     printf("SORT in R side is finished\n");
 
     fprintf(output_file,
     "\n\n___________________________________SORT on RIGHT side___________________________________\n\n\n");
-    WriteOneginArr(output_file, onegin_string_arr, onegin_string_count);
+    WriteOneginArr(output_file, &Onegin);
 
-    //OneginArrStructCopy(onegin_string_count, onegin_string_arr, onegin_string_arr_copy);
-    //WriteOneginArr(output_file, onegin_string_arr_copy, onegin_string_count);
-
-    free(input_buf);
-    free(onegin_string_arr);
+    DistructOnegin(&Onegin);
 }

@@ -12,59 +12,70 @@ struct OneginString {
     size_t len;
 };
 
+/**
+ * @brief Text - struct for all file (text)
+ * 
+ * @param onegin_buf          - Buffer for all file
+ * @param onegin_string_count - Count of onegin strings
+ * @param omegin_size_of_file - Count bytes of file
+ * @param onegin_string_arr   - Arrive of string for onegin
+ */
 typedef struct OneginStringArr {
-     size_t onegin_string_count;
      char * onegin_buf;
+     size_t onegin_string_count;
+     size_t onegin_size_of_file;
      struct OneginString *onegin_string_arr;
 }Text;
 
 /**
  * @brief Count of byte 
  * 
- * @param input_file [in]  - input file
- * 
- * @return size_t    [out] - count of byte
+ * @param input_file [in] - Input file
+ * @param Onegin     [in] - Struct for all file
  */
-size_t file_size(FILE *input_file);
+void FileSize(FILE *input_file, Text *Onegin);
 /**
  * @brief Calculate count of onegin strings
  * 
- * @param onegin_buf      [in]  - The buffer in which the file data is stored
- * @param onegin_buf_size [in]  - Size of file
+ * @param Onegin  [in]  - Struct for all file
  *
- * @return size_t         [out] - Size of file
+ * @return size_t [out] - Size of file
  */
-size_t count_onegin_string(const char *onegin_buf, const size_t onegin_buf_size);
+size_t CountOneginString(Text *Onegin);
 
-struct OneginString NewOneginString(const char *onegin_buf, const size_t onegin_buf_size,
-                                    const size_t start_byte);
+/**
+ * @brief Take one onegin_string
+ * 
+ * @param start_byte [in] - Ptr of begin string
+ * @param Onegin     [in] - Struct for all file
+ * @return struct OneginString 
+ */
+struct OneginString NewOneginString(const size_t start_byte, Text *Onegin);
+
 /**
  * @brief Create a Onegin String Arr object
  * 
- * @param onegin_buf          [in] - The buffer in which the file data is stored
- * @param onegin_buf_size     [in] - Size of file
- * @param onegin_string_count [in] - Count of onegin strings
- * @param onegin_string_arr   [in] - Arrive of string fot onegin
+ * @param Onegin [in] - Struct for all file
  */
-void CreateOneginStringArr(const char *onegin_buf, const size_t onegin_buf_size, 
-                           const size_t onegin_string_count, struct OneginString *onegin_string_arr);
+void CreateOneginStringArr(Text *Onegin);
+
 /**
  * @brief Write string to file
  * 
  * @param output_file [in] - Output file
  * @param onegin_str  [in] - Arrive of string fot onegin
+ * @param Onegin      [in] - Struct for all file
  */
-void WriteOneginString(FILE *output_file, const struct OneginString onegin_str);
+void WriteOneginString(FILE *output_file, const struct OneginString onegin_str, 
+                       Text *Onegin);
 
 /**
  * @brief Write to file all strings
  * 
  * @param output_file         [in] - Output file
- * @param onegin_string_arr   [in] - Arrive of string fot onegin
- * @param onegin_string_count [in] - Count of onegin strings
+ * @param Onegin [in] - Struct for all file
  */
-void WriteOneginArr(FILE *output_file, 
-                    const struct OneginString *onegin_string_arr, const size_t onegin_string_count);
+void WriteOneginArr(FILE *output_file, Text *Onegin);
 
 /**
  * @brief Variables for changing the encoding in favor of the letter YO
@@ -229,3 +240,10 @@ size_t Partition(void *base, size_t low, size_t high, int (*compar)(const void *
 void OneginArrStructCopy(const  size_t onegin_string_count,
                          struct OneginString *onegin_string_arr, 
                          struct OneginString *onegin_string_arr_copy);
+
+/**
+ * @brief Clear mem of Text
+ * 
+ * @param Onegin [in] - struct Text
+ */
+void DistructOnegin(Text *Onegin);

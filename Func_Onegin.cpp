@@ -6,38 +6,32 @@
 #include <ctype.h>
 #include "Onegin.h"
 
-size_t file_size(FILE *input_file) {
+void FileSize(FILE *input_file, Text *Onegin) {
     assert(input_file != NULL);
 
-    size_t size_of_file = 0;
-
     fseek(input_file, 0, SEEK_END);
-    size_of_file = ftello(input_file);
+    Onegin->onegin_size_of_file = ftello(input_file);
     fseek(input_file, 0, SEEK_SET);
-
-    return size_of_file;
 }
 
-size_t count_onegin_string(const char *onegin_buf, const size_t onegin_buf_size) {
-    assert(onegin_buf);
+size_t CountOneginString(Text *Onegin) {
+    assert(Onegin->onegin_buf);
 
-    size_t count_onegin_str = 0;
-    for(size_t i = 0; i < onegin_buf_size; ++i)
-        if(onegin_buf[i] == '\n') count_onegin_str++;
+    for(size_t i = 0; i < Onegin->onegin_size_of_file; ++i)
+        if(Onegin->onegin_buf[i] == '\n') Onegin->onegin_string_count++;
     
-    return count_onegin_str
+    return Onegin->onegin_string_count
             +1; //последняя строка
 }
 
-struct OneginString NewOneginString(const char *onegin_buf, const size_t onegin_buf_size,
-                                    const size_t start_byte) {
-    assert(onegin_buf != NULL);
+struct OneginString NewOneginString(const size_t start_byte, Text *Onegin) {
+    assert(Onegin->onegin_buf);
 
     struct OneginString new_onegin_str;
-    new_onegin_str.str = (char*)onegin_buf + start_byte;
+    new_onegin_str.str = (char*)Onegin->onegin_buf + start_byte;
 
     size_t len_new_onegin_str = 0;
-    while(start_byte + len_new_onegin_str < onegin_buf_size &&
+    while(start_byte + len_new_onegin_str < Onegin->onegin_size_of_file &&
           new_onegin_str.str[len_new_onegin_str] != '\n') {
         if (new_onegin_str.str[len_new_onegin_str] == 'I'  ||
             new_onegin_str.str[len_new_onegin_str] == 'V'  ||
@@ -57,21 +51,21 @@ struct OneginString NewOneginString(const char *onegin_buf, const size_t onegin_
     return new_onegin_str;
 }
 
-void CreateOneginStringArr(const char *onegin_buf, const size_t onegin_buf_size, 
-                           const size_t onegin_string_count, struct OneginString *onegin_string_arr) {
-    assert(onegin_buf != NULL);
-    assert(onegin_string_arr);
+void CreateOneginStringArr(Text *Onegin) {
+    assert(Onegin->onegin_buf);
+    assert(Onegin->onegin_string_arr);
 
     size_t cur_byte = 0;
 
-    for(size_t i = 0; i < onegin_string_count; ++i) {
-        onegin_string_arr[i] = NewOneginString(onegin_buf, onegin_buf_size, cur_byte);
-        cur_byte += onegin_string_arr[i].len
+    for(size_t i = 0; i < Onegin->onegin_string_count; ++i) {
+        Onegin->onegin_string_arr[i] = NewOneginString(cur_byte, Onegin);
+        cur_byte += Onegin->onegin_string_arr[i].len
                     +1;// \0
     }   
 }
 
-void WriteOneginString(FILE *output_file, const struct OneginString onegin_str) {
+void WriteOneginString(FILE *output_file, const struct OneginString onegin_str,
+                       Text *Onegin) {
     assert(output_file);
 
     for(size_t i = 0; i < onegin_str.len; ++i) {
@@ -79,15 +73,14 @@ void WriteOneginString(FILE *output_file, const struct OneginString onegin_str) 
     }
 }
 
-void WriteOneginArr(FILE *output_file, 
-                    const struct OneginString* onegin_string_arr, const size_t onegin_string_count) {
+void WriteOneginArr(FILE *output_file, Text *Onegin) {
     assert(output_file);
-    assert(onegin_string_arr != NULL);
+    assert(Onegin->onegin_string_arr);
 
-    for (size_t i = 0; i < onegin_string_count; ++i) {
-        if((onegin_string_arr + i)->str[0] == '\n') continue;
-        if(onegin_string_arr[i].len == 0) continue;
-        WriteOneginString(output_file, onegin_string_arr[i]);
+    for (size_t i = 0; i < Onegin->onegin_string_count; ++i) {
+        if((Onegin->onegin_string_arr + i)->str[0] == '\n') continue;
+        if(Onegin->onegin_string_arr[i].len == 0) continue;
+        WriteOneginString(output_file, Onegin->onegin_string_arr[i], Onegin);
         fprintf(output_file, "\n");
     }
 }
@@ -283,4 +276,10 @@ void OneginArrStructCopy(const  size_t onegin_string_count,
                 onegin_string_arr[it].str);
     }
 }
-            
+
+void DistructOnegin(Text *Onegin) {
+    free(Onegin->onegin_buf);
+    free(Onegin->onegin_string_arr);
+    Onegin->onegin_string_arr = (OneginString *)(13);
+    Onegin->onegin_buf        = (char *)(13);
+}   
